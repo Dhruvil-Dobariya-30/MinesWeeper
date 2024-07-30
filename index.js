@@ -97,14 +97,27 @@ function generateNumber(totalMine, row, col) {
 
 function sideValues(i, j) {
   if (minesArray[i - 1][j - 1] != "*") {
-    minesArray[i - 1][j - 1] = "@";
-  } else if (minesArray[i - 1][j] != "*") {
-    minesArray[i - 1][j] = "@";
-  } else if (minesArray[i - 1][j + 1] != "*") {
-    minesArray[i - 1][j + 1] = "@";
-  } else if (minesArray[i][j - 1] != "*") {
-    minesArray[i][j - 1] = "@";
-  } else if (minesArray[i][j + 1] != "*") {
-    minesArray[i][j + 1] = "@";
+    document.getElementById(`${minesArray[i - 1][j - 1]}`).innerHTML = 1;
+  }
+  if (minesArray[i - 1][j] != "*") {
+    document.getElementById(`${minesArray[i - 1][j]}`).innerHTML = 1;
+  }
+  if (minesArray[i - 1][j + 1] != "*") {
+    document.getElementById(`${minesArray[i - 1][j + 1]}`).innerHTML = 1;
+  }
+  if (minesArray[i][j - 1] != "*") {
+    document.getElementById(`${minesArray[i][j - 1]}`).innerHTML = 1;
+  }
+  if (minesArray[i][j + 1] != "*") {
+    document.getElementById(`${minesArray[i][j + 1]}`).innerHTML = 1;
+  }
+  if (minesArray[i + 1][j - 1] != "*") {
+    document.getElementById(`${minesArray[i + 1][j - 1]}`).innerHTML = 1;
+  }
+  if (minesArray[i + 1][j] != "*") {
+    document.getElementById(`${minesArray[i + 1][j]}`).innerHTML = 1;
+  }
+  if (minesArray[i + 1][j + 1] != "*") {
+    document.getElementById(`${minesArray[i + 1][j + 1]}`).innerHTML = 1;
   }
 }
