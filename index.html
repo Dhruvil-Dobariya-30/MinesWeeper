@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <title>Mines Weeper</title>
+  </head>
+  <body>
+    <div class="selectMode">
+      <h2>Select Mode</h2>
+      <div class="modes">
+        <button id="easy" onclick="setMode(this.id)">Easy</button>
+        <button id="intermediate" onclick="setMode(this.id)">
+          Intermediate
+        </button>
+        <button id="expert" onclick="setMode(this.id)">Expert</button>
+        <button id="custom" onclick="setMode(this.id)">Custom</button>
+      </div>
+    </div>
+
+    <div id="container"></div>
+    <button onclick="restartGame()">Restart</button>
+    <script src="./index.js"></script>
+  </body>
+</html>

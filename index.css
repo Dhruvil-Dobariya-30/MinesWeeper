@@ -1,0 +1,8 @@
+.mines {
+  display: inline-block;
+  background-color: antiquewhite;
+  width: 35px;
+  height: 40px;
+  border: 1px solid red;
+  text-align: center;
+}
