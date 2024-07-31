@@ -4,7 +4,7 @@ let minesArray = [];
 let indexArray = [];
 
 function displayMines(row, col) {
-  let value = 1;
+  let value = 0;
 
   div = "";
   for (let i = 0; i < row; i++) {
@@ -15,7 +15,7 @@ function displayMines(row, col) {
       div += `<div class="mines" id="${minesArray[i][j]}">&nbsp;</div>`;
     }
   }
-  console.log(minesArray);
+
   document.getElementById("container").innerHTML = div;
 }
 
@@ -42,7 +42,6 @@ function setMode(id) {
     generateNumber(customMines, customRow, customCols);
     toggleModeDiv("hide");
   }
-  displayMines();
 }
 
 function toggleModeDiv(msg) {
@@ -60,64 +59,82 @@ function restartGame() {
 }
 
 function generateNumber(totalMine, row, col) {
-  for (let i = 1; i <= totalMine; i++) {
-    let randomRaw = Math.floor(Math.random() * row);
+  let currentMine = 0;
+  while (currentMine < totalMine) {
+    let randomRow = Math.floor(Math.random() * row);
     let randomCol = Math.floor(Math.random() * col);
 
-    document.getElementById(`${minesArray[randomRaw][randomCol]}`).innerHTML =
-      "*";
-
-    minesArray[randomRaw][randomCol] = "*";
-    indexArray.push([randomRaw, randomCol]);
-    sideValues(randomRaw, randomCol);
-
-    // if (!indexArray.includes([randomRaw, randomCol])) {
-    //   indexArray.push([randomRaw, randomCol]);
-    //     document.getElementById(`${minesArray[randomRaw][randomCol]}`).innerHTML =
-    //       "*";
-    // } else {
-    //   generateNumber();
-    // }
+    if (minesArray[randomRow][randomCol] !== "&#128163;") {
+      document.getElementById(`${minesArray[randomRow][randomCol]}`).innerHTML =
+        "&#128163;";
+      minesArray[randomRow][randomCol] = "&#128163;";
+      // indexArray.push([randomRow, randomCol].join(""));
+      currentMine++;
+      sideValues(row, col);
+    }
   }
   console.log(minesArray);
-  console.log(indexArray);
 }
 
-// function sideValues(i, j) {
-//   let topLeft = document.getElementById(`${minesArray[i - 1][j - 1]}`);
-//   let topMid = document.getElementById(`${minesArray[i - 1][j]}`);
-//   let topRight = document.getElementById(`${minesArray[i - 1][j + 1]}`);
-//   let MidLeft = document.getElementById(`${minesArray[i][j - 1]}`);
-//   let midRight = document.getElementById(`${minesArray[i][j + 1]}`);
-//   let bottomLeft = document.getElementById(`${minesArray[i + 1][j - 1]}`);
-//   let bottomMid = document.getElementById(`${minesArray[i + 1][j]}`);
-//   let bottomRight = document.getElementById(`${minesArray[i + 1][j + 1]}`);
-//   console.log(i, j);
-// }
+function sideValues(r, c) {
+  for (let i = 0; i < r; i++) {
+    for (let j = 0; j < c; j++) {
+      let count = 0;
+      if (minesArray[i][j] == "&#128163;") {
+        if (i > 0 && j > 0 && minesArray[i - 1][j - 1] != "&#128163;") {
+          document.getElementById(`${minesArray[i - 1][j - 1]}`).innerHTML =
+            incrementNumber(i - 1, j - 1);
+        }
+        if (i > 0 && minesArray[i - 1][j] != "&#128163;") {
+          document.getElementById(`${minesArray[i - 1][j]}`).innerHTML =
+            incrementNumber(i - 1, j);
+        }
+        if (
+          i > 0 &&
+          j < minesArray.length - 1 &&
+          minesArray[i - 1][j + 1] != "&#128163;"
+        ) {
+          document.getElementById(`${minesArray[i - 1][j + 1]}`).innerHTML =
+            incrementNumber(i - 1, j + 1);
+        }
+        if (j > 0 && minesArray[i][j - 1] != "&#128163;") {
+          document.getElementById(`${minesArray[i][j - 1]}`).innerHTML =
+            incrementNumber(i, j - 1);
+        }
+        if (j < minesArray.length - 1 && minesArray[i][j + 1] != "&#128163;") {
+          document.getElementById(`${minesArray[i][j + 1]}`).innerHTML =
+            incrementNumber(i, j + 1);
+        }
+        if (
+          i < minesArray.length - 1 &&
+          j > 0 &&
+          minesArray[i + 1][j - 1] != "&#128163;"
+        ) {
+          document.getElementById(`${minesArray[i + 1][j - 1]}`).innerHTML =
+            incrementNumber(i + 1, j - 1);
+        }
+        if (i < minesArray.length - 1 && minesArray[i + 1][j] != "&#128163;") {
+          document.getElementById(`${minesArray[i + 1][j]}`).innerHTML =
+            incrementNumber(i + 1, j);
+        }
+        if (
+          i < minesArray.length - 1 &&
+          j < minesArray.length - 1 &&
+          minesArray[i + 1][j + 1] != "&#128163;"
+        ) {
+          document.getElementById(`${minesArray[i + 1][j + 1]}`).innerHTML =
+            incrementNumber(i + 1, j + 1);
+        }
+      }
+    }
+  }
+}
 
-function sideValues(i, j) {
-  if (minesArray[i - 1][j - 1] != "*") {
-    document.getElementById(`${minesArray[i - 1][j - 1]}`).innerHTML = 1;
-  }
-  if (minesArray[i - 1][j] != "*") {
-    document.getElementById(`${minesArray[i - 1][j]}`).innerHTML = 1;
-  }
-  if (minesArray[i - 1][j + 1] != "*") {
-    document.getElementById(`${minesArray[i - 1][j + 1]}`).innerHTML = 1;
-  }
-  if (minesArray[i][j - 1] != "*") {
-    document.getElementById(`${minesArray[i][j - 1]}`).innerHTML = 1;
-  }
-  if (minesArray[i][j + 1] != "*") {
-    document.getElementById(`${minesArray[i][j + 1]}`).innerHTML = 1;
-  }
-  if (minesArray[i + 1][j - 1] != "*") {
-    document.getElementById(`${minesArray[i + 1][j - 1]}`).innerHTML = 1;
-  }
-  if (minesArray[i + 1][j] != "*") {
-    document.getElementById(`${minesArray[i + 1][j]}`).innerHTML = 1;
-  }
-  if (minesArray[i + 1][j + 1] != "*") {
-    document.getElementById(`${minesArray[i + 1][j + 1]}`).innerHTML = 1;
+function incrementNumber(i, j) {
+  let getDiv = document.getElementById(`${minesArray[i][j]}`);
+  if (getDiv.innerHTML == "&nbsp;") {
+    return 1;
+  } else {
+    return getDiv.innerHTML++;
   }
 }

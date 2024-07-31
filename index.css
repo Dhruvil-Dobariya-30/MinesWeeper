@@ -5,4 +5,5 @@
   height: 40px;
   border: 1px solid red;
   text-align: center;
+  overflow: hidden;
 }
