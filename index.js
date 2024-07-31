@@ -1,22 +1,21 @@
 let div = document.getElementById("container");
 let currentMode;
 let minesArray = [];
-let indexArray = [];
+let minesPositions = [];
 
 function displayMines(row, col) {
-  let value = 0;
+  let value = 1;
 
-  div = "";
+  let data = "";
   for (let i = 0; i < row; i++) {
     minesArray[i] = [];
-    div += "<br/>";
+    data += "<br/>";
     for (let j = 0; j < col; j++) {
       minesArray[i][j] = value++;
-      div += `<div class="mines data" id="${minesArray[i][j]}" onclick="validateMine(this.id)">&nbsp;</div>`;
+      data += `<div class="mines" id="${minesArray[i][j]}" onclick="validateMine(this.id)">&nbsp;</div>`;
     }
   }
-
-  document.getElementById("container").innerHTML = div;
+  div.innerHTML = data;
 }
 
 function setMode(id) {
@@ -53,84 +52,62 @@ function toggleModeDiv(msg) {
   }
 }
 
-function restartGame() {
-  location.reload();
-  toggleModeDiv("show");
-}
-
 function generateNumber(totalMine, row, col) {
   let currentMine = 0;
   while (currentMine < totalMine) {
     let randomRow = Math.floor(Math.random() * row);
     let randomCol = Math.floor(Math.random() * col);
 
-    if (minesArray[randomRow][randomCol] !== "&#128163;") {
+    if (minesArray[randomRow][randomCol] !== "*") {
+      minesPositions.push(minesArray[randomRow][randomCol]);
+
       document.getElementById(
         `${minesArray[randomRow][randomCol]}`
-      ).innerHTML = ` <span class="data">&#128163;</span>`;
+      ).innerHTML = `<span class="data" data-mine="true">&#128163;</span>`;
       minesArray[randomRow][randomCol] = "&#128163;";
-      indexArray.push([randomRow, randomCol]);
       currentMine++;
-      sideValues(row, col);
     }
+    sideValues();
   }
   console.log(minesArray);
 }
 
-function sideValues(r, c) {
-  let numbersArray = Array(r)
-    .fill()
-    .map(() => Array(c).fill(0));
-
-  for (let i = 0; i < r; i++) {
-    for (let j = 0; j < c; j++) {
-      if (minesArray[i][j] == "&#128163;") {
-        if (i > 0 && j > 0 && minesArray[i - 1][j - 1] != "&#128163;") {
-          numbersArray[i - 1][j - 1]++;
-        }
-        if (i > 0 && minesArray[i - 1][j] != "&#128163;") {
-          numbersArray[i - 1][j]++;
-        }
+function sideValues() {
+  for (let i = 0; i < minesArray.length; i++) {
+    for (let j = 0; j < minesArray[i].length; j++) {
+      if (minesArray[i][j] !== "&#128163;") {
+        let count = 0;
+        if (i > 0 && j > 0 && minesArray[i - 1][j - 1] === "&#128163;") count++;
+        if (i > 0 && minesArray[i - 1][j] === "&#128163;") count++;
         if (
           i > 0 &&
-          j < minesArray.length - 1 &&
-          minesArray[i - 1][j + 1] != "&#128163;"
-        ) {
-          numbersArray[i - 1][j + 1]++;
-        }
-        if (j > 0 && minesArray[i][j - 1] != "&#128163;") {
-          numbersArray[i][j - 1]++;
-        }
-        if (j < minesArray.length - 1 && minesArray[i][j + 1] != "&#128163;") {
-          numbersArray[i][j + 1]++;
-        }
+          j < minesArray[i].length - 1 &&
+          minesArray[i - 1][j + 1] === "&#128163;"
+        )
+          count++;
+        if (j > 0 && minesArray[i][j - 1] === "&#128163;") count++;
+        if (
+          j < minesArray[i].length - 1 &&
+          minesArray[i][j + 1] === "&#128163;"
+        )
+          count++;
         if (
           i < minesArray.length - 1 &&
           j > 0 &&
-          minesArray[i + 1][j - 1] != "&#128163;"
-        ) {
-          numbersArray[i + 1][j - 1]++;
-        }
-        if (i < minesArray.length - 1 && minesArray[i + 1][j] != "&#128163;") {
-          numbersArray[i + 1][j]++;
-        }
+          minesArray[i + 1][j - 1] === "&#128163;"
+        )
+          count++;
+        if (i < minesArray.length - 1 && minesArray[i + 1][j] === "&#128163;")
+          count++;
         if (
           i < minesArray.length - 1 &&
-          j < minesArray.length - 1 &&
-          minesArray[i + 1][j + 1] != "&#128163;"
-        ) {
-          numbersArray[i + 1][j + 1]++;
+          j < minesArray[i].length - 1 &&
+          minesArray[i + 1][j + 1] === "&#128163;"
+        )
+          count++;
+        if (count > 0) {
+          document.getElementById(`${minesArray[i][j]}`).innerHTML = count;
         }
-      }
-    }
-  }
-
-  for (let i = 0; i < r; i++) {
-    for (let j = 0; j < c; j++) {
-      if (minesArray[i][j] != "&#128163;" && numbersArray[i][j] > 0) {
-        document.getElementById(
-          `${minesArray[i][j]}`
-        ).innerHTML = `${numbersArray[i][j]}`;
       }
     }
   }
@@ -143,36 +120,81 @@ function validateMine(id) {
   if (visible.innerHTML == "&nbsp;") {
     openSpaces(id);
   } else {
-    if (visible.children[0].innerHTML !== "&nbsp;") {
+    let isMine = visible.querySelector('.data[data-mine="true"]');
+    if (isMine) {
       console.log("GAME OVER!!!");
       alert("GAME OVER!!!");
+      revealAllMines();
+    } else {
+      visible.style.backgroundColor = "white";
     }
   }
 }
 
+function revealAllMines() {
+  for (let mine of minesPositions) {
+    let cell = document.getElementById(mine);
+    cell.style.fontSize = "24px";
+    cell.style.backgroundColor = "red";
+    cell.innerHTML = "&#128163;";
+
+    cell.classList.add("disableMine");
+  }
+}
+
 function openSpaces(id) {
-  console.log(id);
-  console.log("Space Found");
+  let i, j;
 
-  let i;
-  let j;
-
-  let count = 0;
   for (let x in minesArray) {
-    for (let y in minesArray) {
+    for (let y in minesArray[x]) {
       if (minesArray[x][y] == id) {
-        i = x;
-        j = y;
-      } else {
-        count++;
+        i = parseInt(x);
+        j = parseInt(y);
       }
     }
   }
-  console.log(i, j);
 
-  if (minesArray[i][j + 1] == "&nbsp;") {
-    console.log("object");
-    document.getElementById(`${minesArray[i][j]}`).style.backgroundColor =
-      "white";
+  if (i > 0 && j > 0) {
+    revealCell(i - 1, j - 1);
   }
+  if (i > 0) {
+    revealCell(i - 1, j);
+  }
+  if (i > 0 && j < minesArray[0].length - 1) {
+    revealCell(i - 1, j + 1);
+  }
+  if (j > 0) {
+    revealCell(i, j - 1);
+  }
+  if (j < minesArray[0].length - 1) {
+    revealCell(i, j + 1);
+  }
+  if (i < minesArray.length - 1 && j > 0) {
+    revealCell(i + 1, j - 1);
+  }
+  if (i < minesArray.length - 1) {
+    revealCell(i + 1, j);
+  }
+  if (i < minesArray.length - 1 && j < minesArray[0].length - 1) {
+    revealCell(i + 1, j + 1);
+  }
+}
+
+function revealCell(i, j) {
+  let id = minesArray[i][j];
+  let cell = document.getElementById(id);
+
+  if (cell.style.backgroundColor !== "white") {
+    cell.style.backgroundColor = "white";
+    cell.style.fontSize = "24px";
+
+    if (cell.innerHTML === "&nbsp;") {
+      openSpaces(id);
+    }
+  }
+}
+
+function restartGame() {
+  location.reload();
+  toggleModeDiv("show");
 }
