@@ -2,6 +2,24 @@ let div = document.getElementById("container");
 let currentMode;
 let minesArray = [];
 let minesPositions = [];
+<<<<<<< HEAD
+=======
+
+function displayMines(row, col) {
+  let value = 1;
+
+  let data = "";
+  for (let i = 0; i < row; i++) {
+    minesArray[i] = [];
+    data += "<br/>";
+    for (let j = 0; j < col; j++) {
+      minesArray[i][j] = value++;
+      data += `<div class="mines" id="${minesArray[i][j]}" onclick="validateMine(this.id)">&nbsp;</div>`;
+    }
+  }
+  div.innerHTML = data;
+}
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
 
 let customMines;
 function setMode(id) {
@@ -38,6 +56,7 @@ function hideModeDiv() {
   top.innerHTML += `<button onclick="restartGame()" class="resetBtn">&#10227;</button>`;
 }
 
+<<<<<<< HEAD
 function displayBox(row, col) {
   let value = 1;
 
@@ -53,6 +72,8 @@ function displayBox(row, col) {
   div.innerHTML = data;
 }
 
+=======
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
 function generateNumber(totalMine, row, col) {
   // console.log(totalMine, row, col);
   let currentMine = 0;
@@ -60,7 +81,11 @@ function generateNumber(totalMine, row, col) {
     let randomRow = Math.floor(Math.random() * row);
     let randomCol = Math.floor(Math.random() * col);
 
+<<<<<<< HEAD
     if (minesArray[randomRow][randomCol] !== "&#128163;") {
+=======
+    if (minesArray[randomRow][randomCol] !== "*") {
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
       minesPositions.push(minesArray[randomRow][randomCol]);
 
       document.getElementById(
@@ -83,6 +108,7 @@ function sideValues() {
   for (let i = 0; i < minesArray.length; i++) {
     for (let j = 0; j < minesArray[i].length; j++) {
       if (minesArray[i][j] !== "&#128163;") {
+<<<<<<< HEAD
         let sideCounts = 0;
         if (i > 0 && j > 0 && minesArray[i - 1][j - 1] === "&#128163;") {
           sideCounts++;
@@ -92,10 +118,16 @@ function sideValues() {
           sideCounts++;
         }
 
+=======
+        let count = 0;
+        if (i > 0 && j > 0 && minesArray[i - 1][j - 1] === "&#128163;") count++;
+        if (i > 0 && minesArray[i - 1][j] === "&#128163;") count++;
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
         if (
           i > 0 &&
           j < minesArray[i].length - 1 &&
           minesArray[i - 1][j + 1] === "&#128163;"
+<<<<<<< HEAD
         ) {
           sideCounts++;
         }
@@ -111,10 +143,21 @@ function sideValues() {
           sideCounts++;
         }
 
+=======
+        )
+          count++;
+        if (j > 0 && minesArray[i][j - 1] === "&#128163;") count++;
+        if (
+          j < minesArray[i].length - 1 &&
+          minesArray[i][j + 1] === "&#128163;"
+        )
+          count++;
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
         if (
           i < minesArray.length - 1 &&
           j > 0 &&
           minesArray[i + 1][j - 1] === "&#128163;"
+<<<<<<< HEAD
         ) {
           sideCounts++;
         }
@@ -123,10 +166,17 @@ function sideValues() {
           sideCounts++;
         }
 
+=======
+        )
+          count++;
+        if (i < minesArray.length - 1 && minesArray[i + 1][j] === "&#128163;")
+          count++;
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
         if (
           i < minesArray.length - 1 &&
           j < minesArray[i].length - 1 &&
           minesArray[i + 1][j + 1] === "&#128163;"
+<<<<<<< HEAD
         ) {
           sideCounts++;
         }
@@ -134,6 +184,13 @@ function sideValues() {
         if (sideCounts > 0) {
           document.getElementById(`${minesArray[i][j]}`).innerHTML = sideCounts;
         }
+=======
+        )
+          count++;
+        if (count > 0) {
+          document.getElementById(`${minesArray[i][j]}`).innerHTML = count;
+        }
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
       }
     }
   }
@@ -150,12 +207,20 @@ function validateMine(id) {
   } else {
     let isMine = visible.querySelector('.data[data-mine="true"]');
     if (isMine) {
+<<<<<<< HEAD
       // console.log("GAME OVER!!!");
       document.querySelector("#msg").innerHTML = "GAME OVER!!!";
       displayAllMines();
     } else {
       visible.style.backgroundColor = "white";
       visible.classList.remove("count");
+=======
+      console.log("GAME OVER!!!");
+      alert("GAME OVER!!!");
+      revealAllMines();
+    } else {
+      visible.style.backgroundColor = "white";
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
     }
   }
   isWinner();
@@ -180,6 +245,17 @@ function disableAllCells() {
   }
 }
 
+function revealAllMines() {
+  for (let mine of minesPositions) {
+    let cell = document.getElementById(mine);
+    cell.style.fontSize = "24px";
+    cell.style.backgroundColor = "red";
+    cell.innerHTML = "&#128163;";
+
+    cell.classList.add("disableMine");
+  }
+}
+
 function openSpaces(id) {
   let i, j;
 
@@ -193,6 +269,7 @@ function openSpaces(id) {
   }
 
   if (i > 0 && j > 0) {
+<<<<<<< HEAD
     openCells(i - 1, j - 1);
   }
   if (i > 0) {
@@ -263,4 +340,48 @@ function isWinner() {
   document.querySelector(".boxLeft").innerHTML = `Box Left : ${
     allDivCount.length - mines
   }`;
+=======
+    revealCell(i - 1, j - 1);
+  }
+  if (i > 0) {
+    revealCell(i - 1, j);
+  }
+  if (i > 0 && j < minesArray[0].length - 1) {
+    revealCell(i - 1, j + 1);
+  }
+  if (j > 0) {
+    revealCell(i, j - 1);
+  }
+  if (j < minesArray[0].length - 1) {
+    revealCell(i, j + 1);
+  }
+  if (i < minesArray.length - 1 && j > 0) {
+    revealCell(i + 1, j - 1);
+  }
+  if (i < minesArray.length - 1) {
+    revealCell(i + 1, j);
+  }
+  if (i < minesArray.length - 1 && j < minesArray[0].length - 1) {
+    revealCell(i + 1, j + 1);
+  }
+}
+
+function revealCell(i, j) {
+  let id = minesArray[i][j];
+  let cell = document.getElementById(id);
+
+  if (cell.style.backgroundColor !== "white") {
+    cell.style.backgroundColor = "white";
+    cell.style.fontSize = "24px";
+
+    if (cell.innerHTML === "&nbsp;") {
+      openSpaces(id);
+    }
+  }
+}
+
+function restartGame() {
+  location.reload();
+  toggleModeDiv("show");
+>>>>>>> dd12f785fedee506eb1fc7df60d716b2f21ffd99
 }
