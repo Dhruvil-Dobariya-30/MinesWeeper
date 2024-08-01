@@ -10,17 +10,20 @@
     <div class="selectMode">
       <h2>Select Mode</h2>
       <div class="modes">
-        <button id="easy" onclick="setMode(this.id)">Easy</button>
-        <button id="intermediate" onclick="setMode(this.id)">
-          Intermediate
-        </button>
-        <button id="expert" onclick="setMode(this.id)">Expert</button>
-        <button id="custom" onclick="setMode(this.id)">Custom</button>
+        <button id="easy" onclick="setMode(this.id)">EASY</button>
+        <button id="medium" onclick="setMode(this.id)">MEDIUM</button>
+        <button id="hard" onclick="setMode(this.id)">HARD</button>
+        <button id="custom" onclick="setMode(this.id)">CUSTOM</button>
       </div>
     </div>
 
+    <div id="top">
+      <div class="mine"></div>
+      <div class="size"></div>
+      <div class="boxLeft"></div>
+    </div>
+    <div id="msg"></div>
     <div id="container"></div>
-    <button onclick="restartGame()">Restart</button>
     <script src="./index.js"></script>
   </body>
 </html>
